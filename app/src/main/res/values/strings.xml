@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Obscura</string>
+    <string name="welcome_to_obscura">Welcome to Obscura</string>
+    <string name="enter_your_name">Enter your name</string>
+    <string name="create_character">Create Character</string>
+    <string name="quick_match">Quick Match</string>
+    <string name="join_party">Join Party</string>
+    <string name="create_party">Create Party</string>
+    <string name="store">Store</string>
+    <string name="waiting_for_players">Waiting for players...</string>
+    <string name="party_code">Party Code: %s</string>
+    <string name="enter_party_code">Enter Party Code</string>
+    <string name="your_word">Your Word: %s</string>
+    <string name="category">Category: %s</string>
+    <string name="you_are_imposter">You are the Imposter!</string>
+    <string name="give_hint">Give a hint about the word</string>
+    <string name="enter_hint">Enter your hint</string>
+    <string name="submit_hint">Submit Hint</string>
+    <string name="vote_imposter">Vote for the Imposter</string>
+    <string name="game_won">You Won!</string>
+    <string name="game_lost">Game Over</string>
+    <string name="coins_earned">Coins Earned: %d</string>
+    <string name="your_coins">Coins: %d</string>
+    <string name="buy">Buy</string>
+    <string name="equipped">Equipped</string>
+    <string name="avatars">Avatars</string>
+    <string name="accessories">Accessories</string>
+    <string name="round">Round %d</string>
+    <string name="waiting_for_votes">Waiting for votes...</string>
+    <string name="imposter_found">Imposter Found!</string>
+    <string name="imposter_escaped">Imposter Escaped!</string>
+</resources>

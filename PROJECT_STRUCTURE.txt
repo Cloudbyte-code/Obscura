@@ -1,0 +1,119 @@
+Obscura Android Game - Project Structure
+==========================================
+
+Root Level:
+├── README.md                          # Game overview & features
+├── SETUP.md                           # Firebase setup guide
+├── ARCHITECTURE.md                    # Technical architecture
+├── CONTRIBUTING.md                    # Contribution guidelines
+├── PROJECT_SUMMARY.md                 # Complete project summary
+├── build.gradle.kts                   # Root build configuration
+├── settings.gradle.kts                # Project settings
+├── gradle.properties                  # Gradle properties
+├── gradlew / gradlew.bat              # Gradle wrapper scripts
+├── .gitignore                         # Git ignore rules
+│
+└── app/                               # Android app module
+    ├── build.gradle.kts               # App build configuration
+    ├── proguard-rules.pro             # ProGuard rules
+    ├── google-services.json.example   # Firebase config template
+    │
+    └── src/main/
+        ├── AndroidManifest.xml        # App manifest
+        │
+        ├── java/com/obscura/game/
+        │   ├── MainActivity.kt        # Main activity & navigation
+        │   │
+        │   ├── model/                 # Data models
+        │   │   ├── Player.kt          # Player entity
+        │   │   ├── GameParty.kt       # Party/game state
+        │   │   ├── StoreItem.kt       # Store items
+        │   │   ├── GameWords.kt       # Word pool (64 words)
+        │   │   └── GameConstants.kt   # Game configuration
+        │   │
+        │   ├── data/                  # Data layer
+        │   │   └── FirebaseRepository.kt  # All Firebase operations
+        │   │
+        │   ├── viewmodel/             # ViewModels
+        │   │   └── GameViewModel.kt   # Game logic & state
+        │   │
+        │   └── ui/                    # UI layer
+        │       ├── theme/
+        │       │   └── Theme.kt       # Dark theme colors
+        │       │
+        │       └── screens/           # Game screens
+        │           ├── HomeScreen.kt      # Character creation
+        │           ├── MainMenuScreen.kt  # Main menu + dialogs
+        │           ├── LobbyScreen.kt     # Party lobby
+        │           ├── HintRoundScreen.kt # Hint giving phase
+        │           ├── VotingScreen.kt    # Voting phase
+        │           ├── GameOverScreen.kt  # Game results
+        │           └── StoreScreen.kt     # In-game store
+        │
+        └── res/                       # Resources
+            ├── values/
+            │   ├── colors.xml         # Color definitions
+            │   ├── strings.xml        # String resources
+            │   └── themes.xml         # App theme
+            ├── mipmap-*/              # Launcher icons
+            │   ├── ic_launcher.xml
+            │   └── ic_launcher_round.xml
+            └── xml/
+                ├── backup_rules.xml
+                └── data_extraction_rules.xml
+
+Key Features Implemented:
+==========================
+
+✓ Character Creation
+  - Simple name input
+  - Firebase player creation
+  - Starting 100 coins
+
+✓ Party System
+  - Create party (unique 6-char code)
+  - Join party by code
+  - Quick match matchmaking
+  - 3-8 player support
+  - Real-time lobby
+
+✓ Game Mechanics
+  - Random word from 8 categories
+  - 1 Imposter (category only)
+  - Innocents (full word)
+  - 3 hint rounds
+  - Voting system
+  - Winner determination
+
+✓ Rewards
+  - 50 coins for innocent win
+  - 100 coins for imposter win
+  - Real-time coin updates
+
+✓ Store
+  - 4 avatars (Ninja, Spy, Detective, Thief)
+  - 4 accessories (Hat, Sunglasses, Mask, Cape)
+  - Purchase with coins
+  - Track ownership
+
+✓ UI/UX
+  - Dark shady theme
+  - Material 3 design
+  - Jetpack Compose
+  - Smooth navigation
+  - Error handling
+
+Technology Stack:
+=================
+• Kotlin 1.9.0
+• Jetpack Compose + Material 3
+• Firebase Realtime Database
+• MVVM Architecture
+• StateFlow for reactive state
+• Coroutines for async ops
+• Gradle 8.2
+• Min SDK 24, Target SDK 34
+
+Total Files Created: 38
+Lines of Code: ~3500+
+Documentation: ~17,000 words
