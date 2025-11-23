@@ -9,6 +9,9 @@ import kotlinx.coroutines.tasks.await
 import kotlin.random.Random
 
 class FirebaseRepository {
+    companion object {
+        private const val MAX_CODE_GENERATION_ATTEMPTS = 10
+    }
     private val database = FirebaseDatabase.getInstance()
     private val partiesRef = database.getReference("parties")
     private val playersRef = database.getReference("players")
@@ -22,7 +25,7 @@ class FirebaseRepository {
             name = name,
             avatarId = "default",
             accessoryIds = emptyList(),
-            coins = 100 // Starting coins
+            coins = GameConstants.STARTING_COINS
         )
         playersRef.child(playerId).setValue(player).await()
         return player
@@ -52,7 +55,8 @@ class FirebaseRepository {
         val party = GameParty(
             partyCode = partyCode,
             hostId = hostPlayer.id,
-            players = mapOf(hostPlayer.id to hostPlayer.copy(isHost = true))
+            players = mapOf(hostPlayer.id to hostPlayer.copy(isHost = true)),
+            maxRounds = GameConstants.MAX_HINT_ROUNDS
         )
         partiesRef.child(partyCode).setValue(party).await()
         return partyCode
@@ -64,7 +68,7 @@ class FirebaseRepository {
         
         val party = snapshot.getValue(GameParty::class.java) ?: return false
         if (party.gameState != GameState.WAITING) return false
-        if (party.players.size >= 8) return false // Max 8 players
+        if (party.players.size >= GameConstants.MAX_PLAYERS_PER_PARTY) return false
         
         partiesRef.child(partyCode).child("players").child(player.id).setValue(player).await()
         return true
@@ -93,7 +97,7 @@ class FirebaseRepository {
         val snapshot = partiesRef.child(partyCode).get().await()
         val party = snapshot.getValue(GameParty::class.java) ?: return
         
-        if (party.players.size < 3) return // Need at least 3 players
+        if (party.players.size < GameConstants.MIN_PLAYERS_TO_START) return
         
         val (word, category) = GameWords.getRandomWordAndCategory()
         val playerIds = party.players.keys.toList()
@@ -139,7 +143,7 @@ class FirebaseRepository {
                     if (playerId != party.imposterId) {
                         val player = party.players[playerId]
                         if (player != null) {
-                            updatePlayerCoins(playerId, player.coins + 50)
+                            updatePlayerCoins(playerId, player.coins + GameConstants.COINS_FOR_INNOCENT_WIN)
                         }
                     }
                 }
@@ -150,7 +154,7 @@ class FirebaseRepository {
                     partiesRef.child(partyCode).child("gameState").setValue(GameState.GAME_OVER.name).await()
                     val imposter = party.players[party.imposterId]
                     if (imposter != null) {
-                        updatePlayerCoins(party.imposterId, imposter.coins + 100)
+                        updatePlayerCoins(party.imposterId, imposter.coins + GameConstants.COINS_FOR_IMPOSTER_WIN)
                     }
                 } else {
                     // Next round
@@ -176,7 +180,8 @@ class FirebaseRepository {
             if (partyCode != null) {
                 val partySnapshot = partiesRef.child(partyCode).get().await()
                 val party = partySnapshot.getValue(GameParty::class.java)
-                if (party != null && party.gameState == GameState.WAITING && party.players.size < 8) {
+                if (party != null && party.gameState == GameState.WAITING && 
+                    party.players.size < GameConstants.MAX_PLAYERS_PER_PARTY) {
                     if (joinParty(partyCode, player)) {
                         matchmakingRef.child(child.key!!).removeValue().await()
                         return partyCode
@@ -213,10 +218,24 @@ class FirebaseRepository {
         }
     }
     
-    private fun generatePartyCode(): String {
+    private suspend fun generatePartyCode(): String {
         val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        return (1..6)
-            .map { chars.random() }
-            .joinToString("")
+        var attempts = 0
+        
+        while (attempts < MAX_CODE_GENERATION_ATTEMPTS) {
+            val code = (1..GameConstants.PARTY_CODE_LENGTH)
+                .map { chars.random() }
+                .joinToString("")
+            
+            // Check if code already exists
+            val snapshot = partiesRef.child(code).get().await()
+            if (!snapshot.exists()) {
+                return code
+            }
+            attempts++
+        }
+        
+        // Fallback to timestamp-based code if max attempts reached
+        return System.currentTimeMillis().toString().takeLast(GameConstants.PARTY_CODE_LENGTH)
     }
 }

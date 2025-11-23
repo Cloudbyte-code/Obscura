@@ -32,7 +32,7 @@ class GameViewModel : ViewModel() {
                 _currentPlayer.value = player
                 _navigationState.value = NavigationState.MainMenu
             } catch (e: Exception) {
-                _errorMessage.value = "Failed to create character: ${e.message}"
+                _errorMessage.value = "Unable to create character. Please check your connection and try again."
             }
         }
     }
@@ -45,7 +45,7 @@ class GameViewModel : ViewModel() {
                 observeParty(partyCode)
                 _navigationState.value = NavigationState.Lobby
             } catch (e: Exception) {
-                _errorMessage.value = "Failed to create party: ${e.message}"
+                _errorMessage.value = "Unable to create party. Please try again."
             }
         }
     }
@@ -59,10 +59,10 @@ class GameViewModel : ViewModel() {
                     observeParty(partyCode)
                     _navigationState.value = NavigationState.Lobby
                 } else {
-                    _errorMessage.value = "Failed to join party. Party may be full or in progress."
+                    _errorMessage.value = "Unable to join party. It may be full or already started."
                 }
             } catch (e: Exception) {
-                _errorMessage.value = "Failed to join party: ${e.message}"
+                _errorMessage.value = "Connection error. Please check the party code and try again."
             }
         }
     }
@@ -76,10 +76,10 @@ class GameViewModel : ViewModel() {
                     observeParty(partyCode)
                     _navigationState.value = NavigationState.Lobby
                 } else {
-                    _errorMessage.value = "Failed to find a match"
+                    _errorMessage.value = "Unable to find a match. Please try again."
                 }
             } catch (e: Exception) {
-                _errorMessage.value = "Failed to quick match: ${e.message}"
+                _errorMessage.value = "Connection error. Please check your network and try again."
             }
         }
     }
@@ -90,7 +90,7 @@ class GameViewModel : ViewModel() {
                 val partyCode = _currentParty.value?.partyCode ?: return@launch
                 repository.startGame(partyCode)
             } catch (e: Exception) {
-                _errorMessage.value = "Failed to start game: ${e.message}"
+                _errorMessage.value = "Unable to start game. Please ensure you have enough players."
             }
         }
     }
@@ -102,7 +102,7 @@ class GameViewModel : ViewModel() {
                 val partyCode = _currentParty.value?.partyCode ?: return@launch
                 repository.submitHint(partyCode, player.id, hint)
             } catch (e: Exception) {
-                _errorMessage.value = "Failed to submit hint: ${e.message}"
+                _errorMessage.value = "Unable to submit hint. Please try again."
             }
         }
     }
@@ -114,7 +114,7 @@ class GameViewModel : ViewModel() {
                 val partyCode = _currentParty.value?.partyCode ?: return@launch
                 repository.submitVote(partyCode, player.id, votedPlayerId)
             } catch (e: Exception) {
-                _errorMessage.value = "Failed to submit vote: ${e.message}"
+                _errorMessage.value = "Unable to submit vote. Please try again."
             }
         }
     }
@@ -125,7 +125,7 @@ class GameViewModel : ViewModel() {
                 val partyCode = _currentParty.value?.partyCode ?: return@launch
                 repository.moveToVoting(partyCode)
             } catch (e: Exception) {
-                _errorMessage.value = "Failed to move to voting: ${e.message}"
+                _errorMessage.value = "Unable to proceed to voting. Please try again."
             }
         }
     }
@@ -141,7 +141,7 @@ class GameViewModel : ViewModel() {
                     _storeItems.value = items
                 }
             } catch (e: Exception) {
-                _errorMessage.value = "Failed to load store: ${e.message}"
+                _errorMessage.value = "Unable to load store. Please check your connection."
             }
         }
     }
@@ -159,10 +159,10 @@ class GameViewModel : ViewModel() {
                     val updatedPlayer = repository.getPlayer(player.id)
                     _currentPlayer.value = updatedPlayer
                 } else {
-                    _errorMessage.value = "Not enough coins"
+                    _errorMessage.value = "Not enough coins to purchase this item."
                 }
             } catch (e: Exception) {
-                _errorMessage.value = "Failed to buy item: ${e.message}"
+                _errorMessage.value = "Unable to complete purchase. Please try again."
             }
         }
     }

@@ -10,6 +10,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.obscura.game.R
+import com.obscura.game.model.GameConstants
 import com.obscura.game.model.GameParty
 import com.obscura.game.model.Player
 
@@ -28,7 +29,9 @@ fun GameOverScreen(
     val imposterCaught = mostVoted == party.imposterId
     
     val didWin = if (isImposter) !imposterCaught else imposterCaught
-    val coinsEarned = if (didWin) if (isImposter) 100 else 50 else 0
+    val coinsEarned = if (didWin) {
+        if (isImposter) GameConstants.COINS_FOR_IMPOSTER_WIN else GameConstants.COINS_FOR_INNOCENT_WIN
+    } else 0
     
     Column(
         modifier = Modifier

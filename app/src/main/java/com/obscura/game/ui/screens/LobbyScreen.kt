@@ -13,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.obscura.game.R
+import com.obscura.game.model.GameConstants
 import com.obscura.game.model.GameParty
 import com.obscura.game.model.Player
 
@@ -55,7 +56,7 @@ fun LobbyScreen(
         
         Spacer(modifier = Modifier.height(16.dp))
         
-        if (currentPlayer.id == party.hostId && party.players.size >= 3) {
+        if (currentPlayer.id == party.hostId && party.players.size >= GameConstants.MIN_PLAYERS_TO_START) {
             Button(
                 onClick = onStartGame,
                 modifier = Modifier
